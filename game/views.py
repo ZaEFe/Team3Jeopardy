@@ -38,6 +38,7 @@ def set_current_question(request, question_id):
 
 # API for updating the score of a player
 def update_score(request, player_id, question_id, correct):
+    correct = bool(correct)
     player = get_object_or_404(Player, id=player_id)
     question = get_object_or_404(Question, id=question_id)
 
