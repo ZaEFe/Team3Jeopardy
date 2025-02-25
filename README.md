@@ -24,7 +24,7 @@ Follow these steps to run the application:
 Start by cloning this repository to your local machine:
 
 ```bash 
-git clone https://github.com/fill-in-later/jeopardy-game.git
+git clone https://github.com/ZaEFe/Team3Jeopardy.git
 cd jeopardy-game
 ```
 
@@ -36,7 +36,7 @@ Build the Docker images with the following command:
 docker-compose build
 ```
 
-## Set Up the Database
+## 3. Set Up the Database
 
 Once the containers are built, start them up with:
 
