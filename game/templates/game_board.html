@@ -1,0 +1,31 @@
+<html>
+<head>
+    <title>Jeopardy Game Board</title>
+</head>
+<body>
+    <h1>Jeopardy!</h1>
+    <table border="1">
+        {% for category in categories %}
+        <tr>
+            <th>{{ category.name }}</th>
+        </tr>
+        <tr>
+            {% for question in category.question_set.all %}
+            <td onclick="location.href='/question/{{ question.id }}/'">
+                ${{ question.value }}
+            </td>
+            {% endfor %}
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+<script>
+    function revealQuestion(questionId) {
+        fetch(`/set_current_question/${questionId}/`)
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById("question-display").innerText = data.question;
+        });
+    }
+</script>
+</html>

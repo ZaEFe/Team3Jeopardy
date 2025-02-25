@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Host Panel</title>
+    <script>
+        function updateHostView() {
+            fetch("/get_current_question/")
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById("question").innerText = "Question: " + data.question;
+                document.getElementById("answer").innerText = "Answer: " + data.answer;
+            });
+        }
+        setInterval(updateHostView, 2000);
+    </script>
+</head>
+<body>
+    <h1>Instructor Panel</h1>
+    <h2 id="question">Waiting for question...</h2>
+    <h3 id="answer"></h3>
+</body>
+</html>
