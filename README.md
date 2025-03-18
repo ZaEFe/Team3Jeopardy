@@ -67,16 +67,7 @@ docker-compose exec web python manage.py createsuperuser
 
 ## 6. Import Questions from QTI (Optional)
 
-If you have **QTI** file (an XML file containing questions and answers), you can import the questions into the game. You'll need to use the django management command.
-
-First, place your QTI file in the project directory.
-
-Then, run the following command to import the questions:
-
-```bash
-docker-compose exec web python manage.py import_qti your_qti_file.xml
-```
-This will parse the XML file and create the questions and categories in your database.
+TBD
 
 ## 7. Stopping the Containers
 
