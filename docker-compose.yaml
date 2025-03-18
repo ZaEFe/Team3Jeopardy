@@ -6,17 +6,16 @@ services:
       - .:/app
     ports:
       - "8000:8000"
-    depends_on:
-      - db
+    # depends_on:
+    #   - db
 
-  db:
-    image: postgres:13
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-    environment:
-      POSTGRES_DB: jeopardy_db
-      POSTGRES_USER: user
-      POSTGRES_PASSWORD: password
-
-volumes:
-  postgres_data:
+  # db:
+  #   image: postgres:13
+  #   volumes:
+  #     - postgres_data:/var/lib/postgresql/data
+  #   environment:
+  #     POSTGRES_DB: jeopardy_db
+  #     POSTGRES_USER: user
+  #     POSTGRES_PASSWORD: password
+# volumes:
+#   postgres_data:
