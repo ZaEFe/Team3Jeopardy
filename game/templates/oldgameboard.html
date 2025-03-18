@@ -1,0 +1,175 @@
+<!-- <html>
+<head>
+    <title>Jeopardy Game Board</title>
+</head>
+<body>
+    <h1>Jeopardy!</h1>
+    <table border="1">
+        {% for category in categories %}
+        <tr>
+            <th>{{ category.name }}</th>
+        </tr>
+        <tr>
+            {% for question in category.question_set.all %}
+            <td onclick="location.href='/question/{{ question.id }}/'">
+                ${{ question.value }}
+            </td>
+            {% endfor %}
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+<script>
+    function revealQuestion(questionId) {
+        fetch(`/set_current_question/${questionId}/`)
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById("question-display").innerText = data.question;
+        });
+    }
+</script>
+</html> -->
+
+<!-- Test Gameboard with columns-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Jeopardy Game Board</title>
+
+    <!-- Bootstrap CSS -->
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+    />
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            text-align: center;
+        }
+        h1 {
+            margin-top: 20px;
+        }
+        .jeopardy-board {
+            margin: 20px auto;
+        }
+        .category {
+            font-weight: bold;
+            text-align: center;
+            background-color: #007bff;
+            color: white;
+            padding: 10px;
+            border: 1px solid #0056b3;
+        }
+        .question {
+            text-align: center;
+            background-color: #007bff;
+            color: white;
+            padding: 20px;
+            border: 1px solid #0056b3;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .question:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        
+    </header>
+    <h1>NRCC Jeopardy</h1>
+
+    <!-- Upload Button -->
+    <button id="uploadButton" class="btn btn-success mb-3">Upload QTI File</button>
+    <input type="file" id="fileInput" accept=".xml" style="display: none;" />
+
+    <!-- Bootstrap Jeopardy Board -->
+    <div class="container jeopardy-board">
+        <div class="row">
+            <div class="col category">Column 1</div>
+            <div class="col category">Column 2</div>
+            <div class="col category">Column 3</div>
+            <div class="col category">Column 4</div>
+            <div class="col category">Column 5</div>
+        </div>
+        <div id="questionsContainer" class="row">
+            <!-- Questions will be dynamically populated here -->
+        </div>
+    </div>
+
+    <script>
+        document
+            .getElementById("uploadButton")
+            .addEventListener("click", function () {
+                document.getElementById("fileInput").click();
+            });
+
+        document
+            .getElementById("fileInput")
+            .addEventListener("change", function (event) {
+                const file = event.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function (e) {
+                        const xmlContent = e.target.result;
+                        parseQTI(xmlContent);
+                    };
+                    reader.readAsText(file);
+                }
+            });
+
+        function parseQTI(xmlContent) {
+            const parser = new DOMParser();
+            const xmlDoc = parser.parseFromString(xmlContent, "application/xml");
+
+            const questionsContainer = document.getElementById("questionsContainer");
+            questionsContainer.innerHTML = ""; // Clear existing content
+
+            const values = ["$100", "$200", "$300", "$400", "$500"];
+            const columns = Array.from({ length: 5 }, () => []);
+
+            const items = xmlDoc.getElementsByTagName("item");
+
+            for (let i = 0; i < items.length; i++) {
+                const item = items[i];
+                const questionText =
+                    item.getElementsByTagName("questionText")[0]?.textContent ||
+                    "No Question";
+                const answerText =
+                    item.getElementsByTagName("answerText")[0]?.textContent ||
+                    "No Answer";
+
+                const columnIndex = i % 5; // Distribute evenly across 5 columns
+                columns[columnIndex].push({ questionText, answerText, value: values[Math.floor(i / 5) % values.length] });
+            }
+
+            for (let i = 0; i < 5; i++) {
+                const column = columns[i];
+                column.forEach((question) => {
+                    const questionDiv = document.createElement("div");
+                    questionDiv.className = "col question";
+                    questionDiv.textContent = question.value;
+
+                    questionDiv.addEventListener("click", () => {
+                        alert(`${question.questionText}\nAnswer: ${question.answerText}`);
+                    });
+
+                    // Append the question to the container
+                    questionsContainer.appendChild(questionDiv);
+                });
+            }
+        }
+    </script>
+
+    <!-- Bootstrap JS -->
+    <script
+        src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"
+    ></script>
+</body>
+</html>
