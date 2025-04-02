@@ -1,0 +1,166 @@
+/*
+Start Screen (start_screen.html) CSS
+*/
+#before_start {  /* THIS IS ALL ENCOMPASSING */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100vh; /* Full height of the viewport */
+    background-color: rgb(24, 24, 233);
+    /* color: rgb(214, 240, 20); */
+}
+
+/* Before Start button is clicked CSS */
+button.welcome {
+    width: 300px; 
+    height: 100px;
+    border-radius: 75%; /* Makes it round */
+    background-color: rgb(24, 24, 233);
+    color: rgb(214, 240, 20);
+    border: 1px dashed rgb(214, 240, 20);
+    font-size: 1.2rem;
+    font-weight: bold;
+    cursor: pointer; 
+    box-shadow: 2px 4px 6px rgba(214, 240, 20, 0.4);
+    transition: transform 0.2s ease; 
+}
+
+button.welcome:hover {
+    transform: scale(1.1); /* Slightly enlarges the button on hover */
+}
+
+/* 
+After Start button is clicked CSS 
+--Beginning template from Conor Bailey Youtube Channel-- 
+*/ 
+#after_start {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Poppins", sans-serif;
+    background-color: rgb(24, 24, 233);
+    
+}
+
+#after_start header {
+    position: relative;
+    left: 0;
+    top: 0;
+    width: 1005;
+    height: 80px;
+}
+
+#after_start header h4 {
+    position: absolute;
+    left: 10%;
+    bottom: 1rem;
+    font-size: 1.6rem;
+}
+
+/* Splash screen */
+
+.intro {
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100vh;
+    background-color: #161616;
+    transition: 1s;
+}
+
+.intro.slide-up {
+    width: 200px;
+    height: 50px;
+    top: 0;
+    left: 0;
+    transform: translate(20px, 0);
+    background-color: transparent;
+}
+
+.logo-header {
+    position: absolute;
+    top: 40%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: #ffffff;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    justify-content: center;
+    transition: all 1s ease-in-out;
+}
+
+.logo {
+    position: relative;
+    display: inline-block;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: transform 0.5s ease-in-out;
+
+}
+
+.logo.active {
+    transform: translateY(0);
+    opacity: 1;
+    
+}
+
+.logo.fade {
+    bottom: 150px;
+    opacity: 0;
+}
+
+/*Jeopardy Board (jeopardy.html) CSS*/
+/* Header/Banner CSS */
+
+#banner {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    background-color: rgb(24, 24, 233);
+    border-bottom: 2px solid #ccc;
+}
+
+#left_section {
+    display: flex;
+    font-size: xx-large;
+    font-weight: bold;
+    flex-shrink: 1;
+}
+
+h1#logo {
+    margin: .1em 0;
+    color: rgb(214, 240, 20);
+    font-family: 'Lucinda Handwriting', 'Comic Sans MS', cursive, sans-serif;
+    border: 2px solid rgb(214, 240, 20);
+    padding: 5px; 
+    font-size: 1.5em;
+}
+
+
+#middle_section {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start; /* Align items to the left, optional */
+    gap: 0.5rem; /* Optional, adds spacing between items */
+    margin-left: 2px;
+}
+
+#middle_section .labels {
+    margin-bottom: 5px;
+    color: rgb(214, 240, 20);
+}
+
+#right_section {
+    display: flex;
+    flex-direction: column;
+    justify-content: left; /* Align items to the right */
+    margin-bottom: 5px;
+    color: rgb(214, 240, 20);
+    font-size: medium;
+    font-weight: bold;
+    gap: 0.5rem;
+}

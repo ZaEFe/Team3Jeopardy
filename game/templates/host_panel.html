@@ -15,9 +15,61 @@
     </script>
 </head>
 <body>
-    <h1>Instructor Panel</h1>
-    <h2 id="question">Waiting for question...</h2>
-    <h3 id="answer"></h3>
+    <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jeopardy</title>
+    <link rel="stylesheet" href="../static/css/jeopardy.css">
+    <script src="../static/js/jeopardy.js" defer></script>
+</head>
+<body>
+    <header id="banner">
+        <!--This is the lettering-->
+        <div id="left_section">
+            <h1 id="logo">NRCC Jeopardy</h1>
+        </div>
+            
+        <!--These are settings for sound and timer more can be added or removed-->    
+        <div name="settings" id="middle_section">
+            <div>
+                <input type="checkbox" id="sound_toggle" />
+                <label class="labels" for="sound_toggle">Mute/Unmute</label>
+            </div>
+            <div>
+                <input type="checkbox" id="timer_toggle" />
+                <label class="labels" for="timer_toggle">Timer On/Off</label>
+            </div>
+            <div>
+                <input type="checkbox" id="lights_toggle" />
+                <label class="labels" for="lights_toggle">Toggle Lights</label>
+            </div>
+        </div>
+
+        <!--This is the score board-->
+        <div name="scoreboard" id="right_section">
+            <div id="team1">Team 1 Score: 0</div>
+            <div id="team2">Team 2 Score: 0</div>
+            <div id="team3">Team 3 Score: 0</div>
+        </div>
+        
+    </header>
+    <main id="game_board">
+        <table border="1">
+            {% for category in categories %}
+            <tr>
+                <th>{{ category.name }}</th>
+            </tr>
+            <tr>
+                {% for question in category.question_set.all %}
+                <td onclick="location.href='/question/{{ question.id }}/'">
+                    ${{ question.value }}
+                </td>
+                {% endfor %}
+            </tr>
+            {% endfor %}
+        </table>  
 </body>
 </html>
 

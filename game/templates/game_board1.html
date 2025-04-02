@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Jeopardy Game Board</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        text-align: center;
+        background-color: #f4f4f9;
+      }
+
+      h1 {
+        margin-top: 20px;
+      }
+
+      .board {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        grid-gap: 10px;
+        margin: 20px;
+        max-width: 700px;
+        margin: auto;
+      }
+
+      .cell {
+        background-color: #007bff;
+        color: white;
+        padding: 30px;
+        font-size: 24px;
+        border: 2px solid #0056b3;
+        cursor: pointer;
+        transition: background-color 0.3s;
+      }
+
+      .cell:hover {
+        background-color: #0056b3;
+      }
+
+      .cell:active {
+        background-color: #00408a;
+      }
+
+      .cell.category {
+        font-size: 28px;
+        font-weight: bold;
+      }
+
+      .cell.value {
+        font-size: 36px;
+      }
+
+      #uploadButton {
+        margin: 20px;
+        padding: 10px 20px;
+        background-color: #28a745;
+        color: white;
+        border: none;
+        font-size: 18px;
+        cursor: pointer;
+        border-radius: 5px;
+      }
+
+      #uploadButton:hover {
+        background-color: #218838;
+      }
+
+      #fileInput {
+        display: none;
+      }
+    </style>
+  </head>
+
+  <body>
+    <h1>Jeopardy Game Board</h1>
+
+    <!-- Upload Button -->
+    <button id="uploadButton">Upload QTI File</button>
+    <input type="file" id="fileInput" accept=".xml" />
+
+    <div class="board"></div>
+
+    <script>
+      document
+        .getElementById("uploadButton")
+        .addEventListener("click", function () {
+          document.getElementById("fileInput").click();
+        });
+
+      document
+        .getElementById("fileInput")
+        .addEventListener("change", function (event) {
+          const file = event.target.files[0];
+          if (file) {
+            const reader = new FileReader();
+            reader.onload = function (e) {
+              const xmlContent = e.target.result;
+              parseQTI(xmlContent);
+            };
+            reader.readAsText(file);
+          }
+        });
+
+      function parseQTI(xmlContent) {
+        const parser = new DOMParser();
+        const xmlDoc = parser.parseFromString(xmlContent, "application/xml");
+
+        // Extract categories, questions, and answers from the QTI XML
+        const categories = [];
+        const questions = [];
+        const values = ["$100", "$200", "$300", "$400", "$500"];
+
+        const items = xmlDoc.getElementsByTagName("item");
+
+        for (let i = 0; i < items.length; i++) {
+          const item = items[i];
+          const category =
+            item.getElementsByTagName("category")[0]?.textContent ||
+            "Unknown Category";
+          const questionText =
+            item.getElementsByTagName("questionText")[0]?.textContent ||
+            "No Question";
+          const answerText =
+            item.getElementsByTagName("answerText")[0]?.textContent ||
+            "No Answer";
+
+          if (!categories.includes(category)) {
+            categories.push(category);
+          }
+
+          questions.push({ category, questionText, answerText });
+        }
+
+        // Now filter and map the questions into categories with their corresponding point values
+        const limitedQuestions = limitQuestions(categories, questions, values);
+
+        // Generate the game board with the limited questions
+        generateBoard(limitedQuestions, values);
+      }
+
+      function limitQuestions(categories, questions, values) {
+        const limitedQuestions = [];
+
+        // Limit the number of questions to 5 per category and 25 total questions
+        categories.forEach((category) => {
+          let categoryQuestions = questions.filter(
+            (q) => q.category === category
+          );
+          let categoryLimited = [];
+
+          // Select one question per value ($100, $200, etc.)
+          values.forEach((value) => {
+            const questionForValue = categoryQuestions.find((q) =>
+              q.questionText.includes(value)
+            );
+            if (questionForValue) {
+              categoryLimited.push(questionForValue);
+            }
+          });
+
+          limitedQuestions.push({ category, questions: categoryLimited });
+        });
+
+        // Ensure we don't exceed 25 questions in total
+        let totalQuestions = [];
+        limitedQuestions.forEach((cat) => {
+          totalQuestions = totalQuestions.concat(cat.questions);
+        });
+
+        return totalQuestions.slice(0, 25); // Limit to a max of 25 questions
+      }
+
+      function generateBoard(limitedQuestions, values) {
+        const board = document.querySelector(".board");
+        board.innerHTML = "";
+
+        // Add categories and question cells
+        values.forEach((value, valueIndex) => {
+          limitedQuestions.forEach((questionGroup) => {
+            const question = questionGroup.questions[valueIndex];
+
+            if (question) {
+              const valueCell = document.createElement("div");
+              valueCell.classList.add("cell", "value");
+              valueCell.textContent = value;
+
+              valueCell.addEventListener("click", () => {
+                alert(
+                  `${question.questionText}\nAnswer: ${question.answerText}`
+                );
+              });
+
+              board.appendChild(valueCell);
+            }
+          });
+        });
+    }
+</script>
+</html>
